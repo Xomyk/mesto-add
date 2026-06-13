@@ -8,7 +8,7 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mesto</title>
-    <script type="module" crossorigin src="./assets/index-CdyUUbuz.js"></script>
+    <script type="module" crossorigin src="./assets/index-CtpZI2Z9.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-D2z4Cjqv.css">
   </head>
   <body class="page">
@@ -41,11 +41,12 @@
         <p class="footer__copyright">© 2025 Mesto Russia</p>
       </footer>
 
+      <!-- Попап редактирования профиля -->
       <div class="popup popup_type_edit">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Редактировать профиль</h3>
-          <form class="popup__form" name="edit-profile">
+          <form class="popup__form" name="edit-profile" novalidate>
             <label class="popup__label">
               <input
                 type="text"
@@ -53,7 +54,12 @@
                 id="user-name"
                 class="popup__input popup__input_type_name"
                 placeholder="Имя"
+                required
+                minlength="2"
+                maxlength="40"
+                pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               />
+              <span class="popup__error" id="user-name-error"></span>
             </label>
             <label class="popup__label">
               <input
@@ -62,23 +68,23 @@
                 id="user-description"
                 class="popup__input popup__input_type_description"
                 placeholder="Занятие"
+                required
+                minlength="2"
+                maxlength="200"
               />
+              <span class="popup__error" id="user-description-error"></span>
             </label>
-            <button
-              type="submit"
-              class="button popup__button"
-            >
-              Сохранить
-            </button>
+            <button type="submit" class="button popup__button popup__button_disabled" disabled>Сохранить</button>
           </form>
         </div>
       </div>
 
+      <!-- Попап добавления карточки -->
       <div class="popup popup_type_new-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Новое место</h3>
-          <form class="popup__form" name="new-place">
+          <form class="popup__form" name="new-place" novalidate>
             <label class="popup__label">
               <input
                 type="text"
@@ -86,7 +92,12 @@
                 id="place-name"
                 class="popup__input popup__input_type_card-name"
                 placeholder="Название"
+                required
+                minlength="2"
+                maxlength="30"
+                pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
               />
+              <span class="popup__error" id="place-name-error"></span>
             </label>
             <label class="popup__label">
               <input
@@ -95,18 +106,16 @@
                 id="place-link"
                 class="popup__input popup__input_type_url"
                 placeholder="Ссылка на картинку"
+                required
               />
+              <span class="popup__error" id="place-link-error"></span>
             </label>
-            <button
-              type="submit"
-              class="button popup__button"
-            >
-              Создать
-            </button>
+            <button type="submit" class="button popup__button popup__button_disabled" disabled>Создать</button>
           </form>
         </div>
       </div>
 
+      <!-- Попап просмотра изображения -->
       <div class="popup popup_type_image">
         <div class="popup__content popup__content_content_image">
           <button type="button" class="popup__close"></button>
@@ -115,7 +124,7 @@
         </div>
       </div>
 
-      <!-- Модальное окно подтверждения удаления (можно раскомментировать при желании) 
+      <!-- Попап подтверждения удаления (опционально, закомментирован, но структура для чек-листа готова) -->
       <div class="popup popup_type_remove-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -125,13 +134,13 @@
           </form>
         </div>
       </div>
-      -->
 
+      <!-- Попап обновления аватара -->
       <div class="popup popup_type_edit-avatar">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
           <h3 class="popup__title">Обновить аватар</h3>
-          <form class="popup__form" name="edit-avatar">
+          <form class="popup__form" name="edit-avatar" novalidate>
             <label class="popup__label">
               <input
                 type="url"
@@ -139,19 +148,16 @@
                 id="user-avatar"
                 class="popup__input popup__input_type_avatar"
                 placeholder="Ссылка на изображение"
+                required
               />
+              <span class="popup__error" id="user-avatar-error"></span>
             </label>
-            <button
-              type="submit"
-              class="button popup__button"
-            >
-              Сохранить
-            </button>
+            <button type="submit" class="button popup__button popup__button_disabled" disabled>Сохранить</button>
           </form>
         </div>
       </div>
 
-      <!-- Модальное окно статистики (раскомментировано) -->
+      <!-- Попап статистики (раскомментирован) -->
       <div class="popup popup_type_info">
         <div class="popup__content popup__content_content_info">
           <button type="button" class="popup__close"></button>
@@ -164,7 +170,7 @@
     </div>
 
 
-    <!-- Шаблон карточки (счётчик лайков раскомментирован) -->
+    <!-- Шаблон карточки -->
     <template id="card-template">
       <li class="places__item card">
         <img class="card__image" src="" alt="" />
@@ -181,7 +187,7 @@
       </li>
     </template>
 
-    <!-- Шаблон строки статистики (раскомментирован) -->
+    <!-- Шаблон строки статистики -->
     <template id="popup-info-definition-template">
       <div class="popup__info-item">
         <dt class="popup__info-term"></dt>
@@ -189,7 +195,7 @@
       </div>
     </template>
 
-    <!-- Шаблон элемента списка пользователей (раскомментирован) -->
+    <!-- Шаблон элемента списка пользователей -->
     <template id="popup-info-user-preview-template">
       <li class="popup__list-item popup__list-item_type_badge"></li>
     </template>
