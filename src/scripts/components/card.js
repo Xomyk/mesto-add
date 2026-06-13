@@ -1,10 +1,4 @@
-export const likeCard = (likeButton) => {
-  likeButton.classList.toggle("card__like-button_is-active");
-};
-
-export const deleteCard = (cardElement) => {
-  cardElement.remove();
-};
+import { toggleLike, deleteCard as deleteCardApi } from "./api.js";
 
 const getTemplate = () => {
   return document
@@ -13,29 +7,58 @@ const getTemplate = () => {
     .cloneNode(true);
 };
 
-export const createCardElement = (
-  data,
-  { onPreviewPicture, onLikeIcon, onDeleteCard }
-) => {
+export const createCardElement = (cardData, { onPreviewPicture, currentUserId }) => {
   const cardElement = getTemplate();
   const likeButton = cardElement.querySelector(".card__like-button");
   const deleteButton = cardElement.querySelector(".card__control-button_type_delete");
   const cardImage = cardElement.querySelector(".card__image");
+  const likesCountSpan = cardElement.querySelector(".card__like-count");
+  const title = cardElement.querySelector(".card__title");
 
-  cardImage.src = data.link;
-  cardImage.alt = data.name;
-  cardElement.querySelector(".card__title").textContent = data.name;
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
+  title.textContent = cardData.name;
 
-  if (onLikeIcon) {
-    likeButton.addEventListener("click", () => onLikeIcon(likeButton));
+  // Устанавливаем количество лайков
+  likesCountSpan.textContent = cardData.likes.length;
+
+  // Проверяем, лайкнул ли текущий пользователь
+  const isLiked = cardData.likes.some(like => like._id === currentUserId);
+  if (isLiked) {
+    likeButton.classList.add("card__like-button_is-active");
   }
 
-  if (onDeleteCard) {
-    deleteButton.addEventListener("click", () => onDeleteCard(cardElement));
+  // Удаление: показываем кнопку только владельцу
+  if (cardData.owner._id !== currentUserId) {
+    deleteButton.remove();
+  } else {
+    deleteButton.addEventListener("click", (evt) => {
+      evt.stopPropagation();
+      // Здесь лучше открыть модальное окно подтверждения,
+      // но для простоты используем confirm (позже замените на модалку)
+      if (confirm("Вы уверены, что хотите удалить карточку?")) {
+        deleteCardApi(cardData._id)
+          .then(() => {
+            cardElement.remove();
+          })
+          .catch(err => console.error("Ошибка удаления:", err));
+      }
+    });
   }
+
+  // Обработчик лайка с запросом к серверу
+  likeButton.addEventListener("click", () => {
+    const currentlyLiked = likeButton.classList.contains("card__like-button_is-active");
+    toggleLike(cardData._id, currentlyLiked)
+      .then((updatedCard) => {
+        likeButton.classList.toggle("card__like-button_is-active");
+        likesCountSpan.textContent = updatedCard.likes.length;
+      })
+      .catch(err => console.error("Ошибка лайка:", err));
+  });
 
   if (onPreviewPicture) {
-    cardImage.addEventListener("click", () => onPreviewPicture({name: data.name, link: data.link}));
+    cardImage.addEventListener("click", () => onPreviewPicture({ name: cardData.name, link: cardData.link }));
   }
 
   return cardElement;
