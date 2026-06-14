@@ -2,7 +2,7 @@
   Точка входа – инициализация приложения, загрузка данных с сервера,
   навешивание слушателей, открытие статистики по логотипу.
 */
-
+import "../pages/index.css";
 import { getUserInfo, getCardList, updateUserInfo, updateUserAvatar, addCard } from "./components/api.js";
 import { createCardElement } from "./components/card.js";
 import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
