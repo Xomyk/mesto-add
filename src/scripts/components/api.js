@@ -75,4 +75,3 @@ export const toggleLike = (cardId, isLiked) => {
     headers: config.headers,
   }).then(handleResponse);
 };
-EOF
