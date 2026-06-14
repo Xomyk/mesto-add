@@ -51,12 +51,12 @@ export const createCardElement = (cardData, { onPreviewPicture, currentUserId, o
       .catch(err => console.error("Ошибка лайка:", err));
   });
 
-  // Кнопка информации (статистика)
+  // Кнопка информации
   if (onInfoClick) {
     infoButton.addEventListener("click", () => onInfoClick(cardData._id));
   }
 
-  // Превью изображения
+  // Открытие изображения
   if (onPreviewPicture) {
     cardImage.addEventListener("click", () => onPreviewPicture({ name: cardData.name, link: cardData.link }));
   }
