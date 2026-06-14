@@ -3,7 +3,7 @@
   навешивание слушателей, открытие статистики по кнопке «i» на карточке.
 */
 import "../pages/index.css";
-import { getUserInfo, getCardList, updateUserInfo, updateUserAvatar, addCard, deleteCardApi, likeCardApi, unlikeCardApi } from "./components/api.js";
+import { getUserInfo, getCardList, updateUserInfo, updateUserAvatar, addCard } from "./components/api.js";
 import { createCardElement } from "./components/card.js";
 import { openModalWindow, closeModalWindow, setCloseModalWindowEventListeners } from "./components/modal.js";
 import { enableValidation, clearValidation } from "./components/validation.js";
@@ -87,11 +87,9 @@ const handleInfoClick = (cardId) => {
       const cardData = cards.find(card => card._id === cardId);
       if (!cardData) throw new Error("Карточка не найдена");
 
-      // Очистка контейнеров через innerHTML (эффективно)
       statsInfoList.innerHTML = '';
       statsUsersList.innerHTML = '';
 
-      // Заполнение информацией о карточке
       statsInfoList.append(
         createInfoString("Название:", cardData.name),
         createInfoString("Владелец:", cardData.owner.name),
@@ -99,7 +97,6 @@ const handleInfoClick = (cardId) => {
         createInfoString("Количество лайков:", cardData.likes.length.toString())
       );
 
-      // Список пользователей, лайкнувших карточку
       cardData.likes.forEach(user => {
         statsUsersList.append(createUserPreview(user));
       });
@@ -109,23 +106,20 @@ const handleInfoClick = (cardId) => {
     .catch(err => console.error("Ошибка загрузки статистики карточки:", err));
 };
 
-// ===== Рендер карточек (передаём обработчик статистики) =====
+// ===== Рендер карточек =====
 const renderCards = (cards) => {
   placesWrap.innerHTML = "";
   cards.forEach(card => {
     const cardElement = createCardElement(card, {
       onPreviewPicture: handlePreviewPicture,
       onInfoClick: handleInfoClick,
-      currentUserId: currentUserId,
-      deleteCardApi: deleteCardApi,
-      likeCardApi: likeCardApi,
-      unlikeCardApi: unlikeCardApi,
+      currentUserId,
     });
     placesWrap.append(cardElement);
   });
 };
 
-// ===== Загрузка начальных данных (пользователь + карточки) =====
+// ===== Загрузка начальных данных =====
 Promise.all([getUserInfo(), getCardList()])
   .then(([userData, cards]) => {
     currentUserId = userData._id;
@@ -205,10 +199,7 @@ const handleCardSubmit = (evt) => {
       const cardElement = createCardElement(newCard, {
         onPreviewPicture: handlePreviewPicture,
         onInfoClick: handleInfoClick,
-        currentUserId: currentUserId,
-        deleteCardApi: deleteCardApi,
-        likeCardApi: likeCardApi,
-        unlikeCardApi: unlikeCardApi,
+        currentUserId,
       });
       placesWrap.prepend(cardElement);
       closeModalWindow(cardFormModal);
@@ -239,7 +230,7 @@ const validationConfig = {
 };
 enableValidation(validationConfig);
 
-// ===== Закрытие попапов по оверлею и Escape =====
+// ===== Закрытие попапов =====
 const allPopups = document.querySelectorAll(".popup");
 allPopups.forEach(popup => {
   setCloseModalWindowEventListeners(popup);
