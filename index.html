@@ -8,7 +8,7 @@
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Mesto</title>
-    <script type="module" crossorigin src="./assets/index-Rfdca5ne.js"></script>
+    <script type="module" crossorigin src="./assets/index-BgNJVAa8.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-D2z4Cjqv.css">
   </head>
   <body class="page">
@@ -58,6 +58,7 @@
                 minlength="2"
                 maxlength="40"
                 pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
+                data-error-pattern="Разрешены только латинские, кириллические буквы, дефис и пробелы"
               />
               <span class="popup__error" id="user-name-error"></span>
             </label>
@@ -96,6 +97,7 @@
                 minlength="2"
                 maxlength="30"
                 pattern="^[a-zA-Zа-яА-ЯёЁ\s\-]+$"
+                data-error-pattern="Разрешены только латинские, кириллические буквы, дефис и пробелы"
               />
               <span class="popup__error" id="place-name-error"></span>
             </label>
@@ -107,6 +109,7 @@
                 class="popup__input popup__input_type_url"
                 placeholder="Ссылка на картинку"
                 required
+                title="Введите корректный URL, начинающийся с http:// или https://"
               />
               <span class="popup__error" id="place-link-error"></span>
             </label>
@@ -124,7 +127,7 @@
         </div>
       </div>
 
-      <!-- Попап подтверждения удаления (опционально, закомментирован, но структура для чек-листа готова) -->
+      <!-- Попап подтверждения удаления -->
       <div class="popup popup_type_remove-card">
         <div class="popup__content">
           <button type="button" class="popup__close"></button>
@@ -149,6 +152,7 @@
                 class="popup__input popup__input_type_avatar"
                 placeholder="Ссылка на изображение"
                 required
+                title="Введите корректный URL, начинающийся с http:// или https://"
               />
               <span class="popup__error" id="user-avatar-error"></span>
             </label>
@@ -157,7 +161,7 @@
         </div>
       </div>
 
-      <!-- Попап статистики (раскомментирован) -->
+      <!-- Попап статистики -->
       <div class="popup popup_type_info">
         <div class="popup__content popup__content_content_info">
           <button type="button" class="popup__close"></button>
