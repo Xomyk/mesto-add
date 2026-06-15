@@ -1,65 +1,77 @@
 const config = {
-  baseUrl: "https://mesto.nomoreparties.co/v1/apf-cohort-203",
+  baseUrl: "https://nomoreparties.co/v1/apf-cohort-203",
   headers: {
-    authorization: "6754474d-5b84-47e5-9e34-4ed66ebc5fbc",
+    authorization: "0fcd4b31-6ca2-43a5-ac15-9071d1df298e",
     "Content-Type": "application/json",
   },
 };
 
-const checkResponse = (res) => {
+const handleResponse = (res) => {
   if (res.ok) return res.json();
   return Promise.reject(`Ошибка: ${res.status}`);
 };
 
-// Пользователь
-export const getUserInfo = () =>
-  fetch(`${config.baseUrl}/users/me`, { headers: config.headers }).then(checkResponse);
+export const getUserInfo = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+  }).then(handleResponse);
+};
 
-export const updateUserInfo = (name, about) =>
-  fetch(`${config.baseUrl}/users/me`, {
+export const updateUserInfo = (name, about) => {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ name, about }),
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-export const updateUserAvatar = (avatar) =>
-  fetch(`${config.baseUrl}/users/me/avatar`, {
+export const updateUserAvatar = (avatar) => {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
     headers: config.headers,
     body: JSON.stringify({ avatar }),
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-// Карточки
-export const getCardList = () =>
-  fetch(`${config.baseUrl}/cards`, { headers: config.headers }).then(checkResponse);
+export const getCardList = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers,
+  }).then(handleResponse);
+};
 
-export const addCard = (name, link) =>
-  fetch(`${config.baseUrl}/cards`, {
+export const addCard = (name, link) => {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
     headers: config.headers,
     body: JSON.stringify({ name, link }),
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-export const deleteCardApi = (cardId) =>
-  fetch(`${config.baseUrl}/cards/${cardId}`, {
+export const deleteCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-export const likeCardApi = (cardId) =>
-  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+export const likeCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "PUT",
     headers: config.headers,
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-export const unlikeCardApi = (cardId) =>
-  fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+export const unlikeCard = (cardId) => {
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
     method: "DELETE",
     headers: config.headers,
-  }).then(checkResponse);
+  }).then(handleResponse);
+};
 
-// Универсальная функция для переключения лайка
 export const toggleLike = (cardId, isLiked) => {
-  const method = isLiked ? unlikeCardApi : likeCardApi;
-  return method(cardId);
+  const method = isLiked ? "DELETE" : "PUT";
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method,
+    headers: config.headers,
+  }).then(handleResponse);
 };
