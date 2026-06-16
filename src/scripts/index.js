@@ -79,7 +79,7 @@ const renderCards = (cards) => {
   cards.forEach(card => {
     const cardElement = createCardElement(card, {
       onPreviewPicture: handlePreviewPicture,
-      onDeleteCard: openDeleteConfirmModal,   // передаём функцию открытия попапа
+      onDeleteCard: openDeleteConfirmModal,
       currentUserId: currentUserId,
     });
     placesWrap.append(cardElement);
@@ -248,7 +248,7 @@ const handleLogoClick = () => {
       });
 
       const totalUsers = userMap.size;
-      const totalCards = cards.length;                     // добавлено
+      const totalCards = cards.length;                     // ✅ добавлено
       let maxCards = 0;
       for (const { count } of userMap.values()) {
         if (count > maxCards) maxCards = count;
@@ -257,8 +257,9 @@ const handleLogoClick = () => {
       statsInfoList.innerHTML = '';
       statsUsersList.innerHTML = '';
 
-      // Порядок полей строго по макету:
+      // Порядок полей строго по макету (с учетом добавленного поля):
       statsInfoList.append(createInfoString("Всего пользователей:", totalUsers));
+      statsInfoList.append(createInfoString("Всего карточек:", totalCards));   // ✅ добавлено
       statsInfoList.append(createInfoString("Максимум карточек от одного:", maxCards));
       statsInfoList.append(createInfoString("Первая создана:", formatDate(minDate)));
       statsInfoList.append(createInfoString("Последняя создана:", formatDate(maxDate)));
@@ -280,7 +281,8 @@ const handleLogoClick = () => {
     })
     .catch(err => {
       console.error("Ошибка загрузки статистики:", err);
-      alert("Не удалось загрузить статистику");
+      // Вместо alert показываем сообщение внутри модального окна
+      statsInfoList.innerHTML = '<p class="popup__error-message">Не удалось загрузить статистику</p>';
     });
 };
 
